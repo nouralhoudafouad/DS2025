@@ -1,61 +1,83 @@
-# 🌸 Iris Dataset — UCI Machine Learning Repository
+# ===============================================
+# Analyse du dataset Iris avec ACP
+# DOI: 10.24432/C56C76
+# ===============================================
 
-**DOI** : [10.24432/C56C76](https://doi.org/10.24432/C56C76)  
-**Titre complet** : *Iris*  
-**Auteur** : Ronald A. Fisher  
-**Institution** : UCI Machine Learning Repository  
-**Année de création** : 1936 (publié dans *Annals of Eugenics*, puis ajouté à UCI en 1988)  
-**Licence** : Creative Commons Attribution 4.0 International (CC BY 4.0)  
+# 1. Importer les bibliothèques nécessaires
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
----
+# 2. Charger le dataset Iris
+iris = load_iris()
+X = iris.data      # Variables quantitatives
+y = iris.target    # Classes
+features = iris.feature_names
+species = iris.target_names
 
-## 🧠 Description du projet
+# Créer un DataFrame pour faciliter l'analyse
+df = pd.DataFrame(X, columns=features)
+df['species'] = [species[i] for i in y]
 
-Le **jeu de données Iris** est l’un des ensembles de données les plus célèbres en statistique et en apprentissage automatique.  
-Il contient des **mesures morphologiques** de fleurs appartenant à **trois espèces d’iris** :  
-- *Iris setosa*  
-- *Iris versicolor*  
-- *Iris virginica*
+# 3. Statistiques descriptives
+print("=== Statistiques descriptives ===")
+print(df.describe())
 
-Chaque observation décrit une fleur à l’aide de **4 attributs numériques** :  
-- `sepal length` — longueur du sépale (cm)  
-- `sepal width` — largeur du sépale (cm)  
-- `petal length` — longueur du pétale (cm)  
-- `petal width` — largeur du pétale (cm)
+# 4. Visualisation exploratoire
+# 4.1 Pairplot pour visualiser les relations entre variables
+sns.pairplot(df, hue='species', palette='Set2')
+plt.suptitle("Pairplot des attributs selon l'espèce", y=1.02)
+plt.show()
 
-L’objectif principal est de **classer une fleur** en fonction de ces caractéristiques dans l’une des trois espèces.
+# 4.2 Heatmap des corrélations
+plt.figure(figsize=(8,6))
+sns.heatmap(df[features].corr(), annot=True, cmap='coolwarm')
+plt.title("Matrice de corrélation des variables")
+plt.show()
 
----
+# 5. Standardisation des données (très important pour l'ACP)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
 
-## 📊 Contenu du jeu de données
+# 6. Application de l'ACP
+pca = PCA(n_components=2)  # Réduction à 2 composantes principales
+X_pca = pca.fit_transform(X_scaled)
 
-- **Nombre total d’instances** : 150  
-- **Nombre d’attributs** : 4 (plus une étiquette de classe)  
-- **Nombre de classes** : 3 (50 exemples par espèce)  
-- **Type de tâche** : Classification multiclasse  
+# Variance expliquée
+print("\n=== Variance expliquée par chaque composante ===")
+for i, var in enumerate(pca.explained_variance_ratio_):
+    print(f"PC{i+1}: {var*100:.2f}%")
 
-### Exemple d’enregistrement :
-| Sepal Length | Sepal Width | Petal Length | Petal Width | Class |
-|---------------|-------------|---------------|--------------|--------|
-| 5.1 | 3.5 | 1.4 | 0.2 | Iris-setosa |
+# 7. Visualisation des composantes principales
+plt.figure(figsize=(8,6))
+for i, specie in enumerate(species):
+    plt.scatter(X_pca[y==i,0], X_pca[y==i,1], label=specie)
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.title('Projection des Iris sur les 2 premières composantes principales')
+plt.legend()
+plt.grid(True)
+plt.show()
 
----
+# 8. Contribution des variables aux composantes principales
+loadings = pd.DataFrame(pca.components_.T, columns=['PC1','PC2'], index=features)
+print("\n=== Charges des variables sur les composantes principales ===")
+print(loadings)
 
-## 🎯 Objectif du projet
+# 9. Biplot (optionnel)
+plt.figure(figsize=(8,6))
+plt.scatter(X_pca[:,0], X_pca[:,1], c=y, cmap='Set2', alpha=0.7)
+for i, feature in enumerate(features):
+    plt.arrow(0, 0, loadings.PC1[i]*3, loadings.PC2[i]*3, 
+              color='r', alpha=0.7, head_width=0.1)
+    plt.text(loadings.PC1[i]*3.2, loadings.PC2[i]*3.2, feature, color='r')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.title('Biplot des 2 premières composantes principales')
+plt.grid()
+plt.show()
 
-Ce jeu de données est couramment utilisé pour :  
-- Enseigner les concepts de **classification supervisée**  
-- Tester et évaluer des **algorithmes de machine learning** (k-NN, SVM, régression logistique, etc.)  
-- Illustrer des **techniques de visualisation** et de **réduction de dimension** (PCA, LDA)  
-- Servir d’exemple de référence dans les tutoriels de **data science**
-
----
-
-## 🔗 Références
-
-- [Page officielle sur UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/53/iris)  
-- [DOI officiel : 10.24432/C56C76](https://doi.org/10.24432/C56C76)  
-- Publication originale : *R. A. Fisher (1936), “The use of multiple measurements in taxonomic problems,” Annals of Eugenics, 7(2), 179–188.*
-
----
 
