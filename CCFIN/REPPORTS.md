@@ -1,95 +1,61 @@
-# ===============================================
-# Rapport détaillé automatique sur le dataset Iris
-# DOI: 10.24432/C56C76
-# Google Colab Ready
-# ===============================================
+# ❤️ Heart Disease Dataset
 
-# Installer et importer les bibliothèques nécessaires
-!pip install pandas matplotlib seaborn --quiet
+**DOI** : [10.24432/C52P4X](https://doi.org/10.24432/C52P4X)  
+**Titre complet** : *Heart Disease*  
+**Auteurs** : Andras Janosi, William Steinbrunn, Matthias Pfisterer, Robert Detrano  
+**Institution** : UCI Machine Learning Repository  
+**Année de création** : 1988  
+**Licence** : Creative Commons Attribution 4.0 International (CC BY 4.0)  
 
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.datasets import load_iris
+---
 
-# ------------------------------
-# 1. Charger le dataset Iris
-# ------------------------------
-iris = load_iris()
-X = iris.data
-y = iris.target
-features = iris.feature_names
-species = iris.target_names
+## 🧠 Description du projet
 
-# Création d'un DataFrame
-df = pd.DataFrame(X, columns=features)
-df['species'] = [species[i] for i in y]
+Le **jeu de données Heart Disease** regroupe des informations médicales sur des patients afin de prédire la **présence ou l’absence de maladie cardiaque**.  
+Il provient de **quatre sources hospitalières** :  
+- Cleveland Clinic Foundation  
+- Hungarian Institute of Cardiology (Budapest)  
+- University Hospital (Zurich, Switzerland)  
+- Veterans Administration Medical Center (Long Beach, California)
 
-# ------------------------------
-# 2. Informations générales sur le dataset
-# ------------------------------
-print("=== Informations générales sur le dataset Iris ===")
-print(f"Nombre total d'échantillons : {df.shape[0]}")
-print(f"Nombre de variables : {df.shape[1]-1} (hors variable cible)")
-print(f"Nom des variables : {features}")
-print(f"Classes présentes : {list(df['species'].unique())}\n")
+La base **Cleveland** est la plus utilisée, car elle contient les données les plus complètes et est devenue la référence dans la recherche sur la détection des maladies cardiaques par apprentissage automatique.
 
-# Nombre d'échantillons par classe
-print("=== Répartition des classes ===")
-print(df['species'].value_counts(), "\n")
+---
 
-# ------------------------------
-# 3. Statistiques globales
-# ------------------------------
-print("=== Statistiques descriptives globales ===")
-display(df.describe())
+## 📊 Contenu du jeu de données
 
-# ------------------------------
-# 4. Statistiques par espèce
-# ------------------------------
-print("=== Statistiques par espèce (moyenne et écart-type) ===")
-display(df.groupby('species').agg(['mean', 'std']))
+- **Nombre d’instances** : 303  
+- **Nombre d’attributs** : 13 (plus une variable cible)  
+- **Type de tâche** : Classification binaire  
+- **Variable cible** : `target` — indique la présence (1) ou l’absence (0) de maladie cardiaque  
 
-# ------------------------------
-# 5. Visualisations
-# ------------------------------
+### Exemples de variables :
+| Nom | Description |
+|------|--------------|
+| `age` | Âge du patient |
+| `sex` | Sexe (1 = homme, 0 = femme) |
+| `cp` | Type de douleur thoracique |
+| `trestbps` | Pression artérielle au repos |
+| `chol` | Taux de cholestérol |
+| `thalach` | Fréquence cardiaque maximale atteinte |
+| `oldpeak` | Dépression du segment ST induite par l’exercice |
+| `exang` | Angine de poitrine induite par l’exercice (1 = oui, 0 = non) |
 
-# 5.1 Histogrammes pour chaque variable
-df[features].hist(figsize=(12,10), bins=15, color='lightgreen', edgecolor='black')
-plt.suptitle("Histogrammes des variables", fontsize=18)
-plt.show()
+---
 
-# 5.2 Boxplots par espèce
-plt.figure(figsize=(14,10))
-for i, feature in enumerate(features):
-    plt.subplot(2,2,i+1)
-    sns.boxplot(x='species', y=feature, data=df, palette='Set2')
-    plt.title(f"Boxplot de {feature} selon l'espèce", fontsize=12)
-plt.tight_layout()
-plt.show()
+## 🎯 Objectif du projet
 
-# 5.3 Pairplot pour visualiser les relations entre variables
-sns.pairplot(df, hue='species', palette='Set2', diag_kind='hist', corner=False)
-plt.suptitle("Pairplot des variables selon l'espèce", y=1.02, fontsize=16)
-plt.show()
+Ce jeu de données a été conçu pour :  
+- Étudier les **facteurs de risque cardiovasculaire**  
+- Construire des **modèles prédictifs** en apprentissage automatique  
+- Tester et comparer les performances d’**algorithmes de classification médicale**  
 
-# 5.4 Matrice de corrélation
-plt.figure(figsize=(8,6))
-sns.heatmap(df[features].corr(), annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
-plt.title("Matrice de corrélation des variables", fontsize=16)
-plt.show()
+Il est couramment utilisé dans les projets d’IA, de data science et de santé publique.
 
-# ------------------------------
-# 6. Analyse approfondie par variable
-# ------------------------------
-print("=== Analyse approfondie par variable ===")
-for feature in features:
-    print(f"\nVariable : {feature}")
-    print(f"  - Moyenne générale : {df[feature].mean():.2f}")
-    print(f"  - Écart-type général : {df[feature].std():.2f}")
-    for specie in species:
-        mean_val = df[df['species']==specie][feature].mean()
-        std_val = df[df['species']==specie][feature].std()
-        print(f"    * {specie} -> moyenne: {mean_val:.2f}, écart-type: {std_val:.2f}")
+---
 
+## 🔗 Références
+
+- [Page officielle sur UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/45/heart+disease)  
+- [DOI officiel : 10.24432/C52P4X](https://doi.org/10.24432/C52P4X)
 
