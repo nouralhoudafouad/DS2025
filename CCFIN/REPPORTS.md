@@ -1,1 +1,19 @@
+=LDR  00000nam a2200000 i 4500
+=001  10.24432/C56C76
+=003  UCI
+=004  53
+=005  20251113    // date de catalogage
+=008  240101s1988    xxu|||||    |||||000 0|eng  
+=040  ## ‐ ‐ |a UCI |b eng |e rda  
+=100  1# |a Fisher, R. A.  
+=245  10 |a Iris dataset : |b A small classic dataset from Fisher (1936) / |c donated to the UCI Machine Learning Repository  
+=260  ## |a Irvine, CA : |b UCI Machine Learning Repository, |c 1988  
+=300  ## |a 150 records ; |b 4 attributes + target class  
+=500  ## |a License: CC BY 4.0  
+=520  ## |a This dataset contains 150 instances of iris plants from three species (50 each). Each instance has four continuous features (sepal length, sepal width, petal length, petal width) and a target class (species). One class is linearly separable from the other two. No missing values.  
+=650  #0 |a Iris plants |x Classification.  
+=650  #0 |a Machine learning datasets.  
+=700 1# |a UCI Machine Learning Repository.  
+=856 40 |u https://archive.ics.uci.edu/dataset/53/iris |z Dataset access link  
+=856 40 |u https://doi.org/10.24432/C56C76 |z DOI link  
 
