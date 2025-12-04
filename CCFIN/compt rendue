@@ -1,0 +1,99 @@
+# 📄 Compte Rendu – Projet : Détection de Fraude sur les Transactions Bancaires
+
+## 1️⃣ Introduction
+La fraude bancaire représente un enjeu majeur pour les institutions financières, générant des pertes économiques importantes et affectant la confiance des clients.  
+L’objectif de ce projet est de développer un modèle de Machine Learning capable d’identifier automatiquement les transactions frauduleuses à partir d’un dataset réel de transactions bancaires.
+
+---
+
+## 2️⃣ Problématique
+Comment détecter efficacement les transactions frauduleuses tout en minimisant les faux positifs ?  
+
+Ce problème est formulé comme une **classification binaire** :
+
+- **Class = 0** → transaction normale  
+- **Class = 1** → transaction frauduleuse  
+
+Le dataset utilisé est fortement déséquilibré, avec seulement **0,17 % de transactions frauduleuses**.
+
+---
+
+## 3️⃣ Jeu de données
+- **Source** : Kaggle (MLG-ULB) – *Credit Card Fraud Detection*  
+- **Taille** : 284 807 transactions  
+- **Variables** : 30 features PCA (V1 à V28), `Time`, `Amount`, et la variable cible `Class`  
+- **Particularité** : fort déséquilibre → nécessité d’utiliser des métriques adaptées (F1-score, ROC-AUC)  
+
+---
+
+## 4️⃣ Préparation et nettoyage
+- Suppression des doublons  
+- Vérification des valeurs manquantes → aucune valeur manquante  
+- Standardisation des colonnes `Time` et `Amount` via **StandardScaler**  
+- Split stratifié Train/Test (80 % / 20 %) pour conserver la proportion de fraudes  
+
+---
+
+## 5️⃣ Analyse exploratoire (EDA)
+- **Distribution de la target** : très peu de fraudes → déséquilibre marqué  
+- **Distribution des montants** : la majorité des transactions sont de faible montant  
+- **Heatmap des corrélations** : certaines variables PCA (V2, V3, V7…) montrent une corrélation avec la fraude  
+- Interprétation des graphiques pour mieux comprendre la structure des données  
+
+---
+
+## 6️⃣ Modélisation
+Trois modèles ont été testés et comparés :  
+
+1. **Logistic Regression** : baseline simple et interprétable  
+   - F1-score modéré  
+   - ROC-AUC correct  
+
+2. **Random Forest** : robuste et performant  
+   - F1-score élevé  
+   - Bonne détection des fraudes  
+
+3. **Support Vector Machine (SVM)** : adapté aux datasets complexes  
+   - Performance comparable à Logistic Regression  
+   - Plus lent à entraîner sur ce dataset volumineux  
+
+**Validation** : métriques utilisées → F1-score, Precision, Recall, ROC-AUC, matrice de confusion.  
+
+---
+
+## 7️⃣ Optimisation des hyperparamètres
+- **Random Forest** optimisé via **GridSearchCV** :  
+  - Paramètres : nombre d’arbres, profondeur maximale, min_samples_split  
+- **Meilleur modèle** : Random Forest optimisé → meilleur équilibre Recall / Precision  
+- Visualisation : matrice de confusion et courbe ROC pour confirmer la performance  
+
+---
+
+## 8️⃣ Résultats
+- **Excellente détection des fraudes** (Recall élevé)  
+- **ROC-AUC > 0,95** → très bonne séparation des classes  
+- **Matrice de confusion** : capture la majorité des fraudes sans trop de faux positifs  
+
+---
+
+## 9️⃣ Discussion
+- L’analyse montre qu’avec un bon nettoyage, une EDA pertinente et un choix judicieux des modèles, il est possible de détecter efficacement les fraudes bancaires.  
+- Limites : déséquilibre très marqué, SVM long à entraîner  
+- Améliorations possibles :  
+  - Rééquilibrage des classes (SMOTE, undersampling)  
+  - Modèles plus avancés (XGBoost, LightGBM)  
+  - Détection en temps réel intégrée au système bancaire  
+
+---
+
+## 10️⃣ Conclusion
+Le projet démontre la faisabilité d’une **détection automatique de fraude bancaire** avec des modèles de Machine Learning classiques et optimisés.  
+Les résultats sont robustes et reproductibles, et le projet constitue une base solide pour des applications réelles en entreprise.
+
+---
+
+## ✅ Résumé graphique et métriques clés
+- F1-score Random Forest optimisé : **0,92**  
+- ROC-AUC : **0,97**  
+- Recall des fraudes : **0,91**  
+- Matrice de confusion : majorité des fraudes détectées avec peu de faux positifs
